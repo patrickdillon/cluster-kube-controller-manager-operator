@@ -31,6 +31,22 @@ spec:
             export AWS_CA_BUNDLE=/etc/kubernetes/static-pod-resources/configmaps/cloud-config/ca-bundle.pem
           fi
 
+          cat << EOF > /etc/kubernetes/azurestackcloud.json
+          {
+            "name": "AzureStackCloud",
+            "resourceManagerEndpoint": "https://management.ppe3.stackpoc.com",
+            "activeDirectoryEndpoint": "https://login.microsoftonline.com/",
+            "galleryEndpoint": "https://providers.ppe3.local:30016/",
+            "storageEndpointSuffix": "https://providers.ppe3.local:30016/",
+            "serviceManagementEndpoint": "https://management.stackpoc.com/81c9b804-ec9e-4b5a-8845-1d197268b1f5",
+            "graphEndpoint":                "https://graph.windows.net/",
+            "resourceIdentifiers": {
+              "graph": "https://graph.windows.net/"
+            }
+          }
+          EOF
+          export AZURE_ENVIRONMENT_FILEPATH=/etc/kubernetes/azurestackcloud.json
+
           exec hyperkube kube-controller-manager --openshift-config=/etc/kubernetes/static-pod-resources/configmaps/config/config.yaml \
             --kubeconfig=/etc/kubernetes/static-pod-resources/configmaps/controller-manager-kubeconfig/kubeconfig \
             --authentication-kubeconfig=/etc/kubernetes/static-pod-resources/configmaps/controller-manager-kubeconfig/kubeconfig \
